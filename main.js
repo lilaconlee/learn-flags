@@ -25,7 +25,7 @@ function refreshCountry() {
 
   countryName.classList.add('invisible');
   countryName.textContent = country.name;
-  flagContainer.src = './country-flags/svg/' + country.initials + '.svg';
+  flagContainer.src = './country-flags/svg/' + country.initials.toLowerCase() + '.svg';
 }
 
 function cheat() {
