@@ -1,0 +1,30 @@
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+input {
+  font-size: 1.1em;
+  margin: 5px;
+  padding: 5px;
+  background: #F9F9F9;
+  border: 0;
+  box-shadow: inset 0px 1px 1px #e0e4e9;
+}
+
+#flagContainer {
+  margin: 10% 5% 0 5%;
+  height: 300px;
+  width: 450px;
+}
+
+.hidden {
+  display: none;
+}
+
+.invisible {
+  visibility: hidden;  
+}
