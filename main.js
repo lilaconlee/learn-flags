@@ -24,7 +24,7 @@ function refreshCountry() {
   nextButton.classList.add('hidden');
 
   countryName.classList.add('invisible');
-  countryName.textContent = country.name;
+  countryName.textContent = Array.isArray(country.name) ? country.name[0] : country.name;
   flagContainer.src = './country-flags/svg/' + country.initials.toLowerCase() + '.svg';
 }
 
@@ -46,10 +46,22 @@ function main() {
     if (event.which === 13) { cheat(); }
   });
   input.addEventListener('input', function () {
-    if (input.value.toLowerCase() === country.name.toLowerCase()) {
+    var answer = normalize(input.value.toLowerCase());
+    if (Array.isArray(country.name)) {
+      var names = country.name;
+      for (var i = 0; i < names.length; i++) {
+        if (answer === normalize(names[i].toLowerCase())) {
+          refreshCountry();
+        }
+      }
+    } else if (answer === normalize(country.name.toLowerCase())) {
       refreshCountry();
     }
   });
+}
+
+function normalize(name) {
+  return name.replace(/'\./, "").replace(/-/, " ");
 }
 
 main();

@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 module.exports={
     "AD": "Andorra",
-    "AE": "United Arab Emirates",
+    "AE": [ "United Arab Emirates", "UAE" ],
     "AF": "Afghanistan",
     "AG": "Antigua and Barbuda",
     "AI": "Anguilla",
@@ -36,7 +36,7 @@ module.exports={
     "CA": "Canada",
     "CC": "Cocos Islands",
     "CD": "Congo",
-    "CF": "Central African Republic",
+    "CF": [ "Central African Republic", "CAR" ],
     "CG": "Congo",
     "CH": "Switzerland",
     "CI": "Cote d'Ivoire",
@@ -51,7 +51,7 @@ module.exports={
     "CW": "Curacao",
     "CX": "Christmas Island",
     "CY": "Cyprus",
-    "CZ": "Czech Republic",
+    "CZ": [ "Czechia", "Czech Republic" ],
     "DE": "Germany",
     "DJ": "Djibouti",
     "DK": "Denmark",
@@ -109,7 +109,7 @@ module.exports={
     "KH": "Cambodia",
     "KI": "Kiribati",
     "KM": "Comoros",
-    "KN": "Saint Kitts and Nevis",
+    "KN": [ "Saint Kitts and Nevis", "St. Kitts and Nevis" ],
     "KP": "North Korea",
     "KR": "South Korea",
     "KW": "Kuwait",
@@ -132,13 +132,13 @@ module.exports={
     "ME": "Montenegro",
     "MG": "Madagascar",
     "MH": "Marshall Islands",
-    "MK": "Macedonia",
+    "MK": [ "Macedonia", "FYROM", "Former Yugoslav Republic of Macedonia" ],
     "ML": "Mali",
-    "MM": "Myanmar",
+    "MM": [ "Myanmar", "Burma" ],
     "MN": "Mongolia",
     "MO": "Macao",
     "MP": "Northern Mariana Islands",
-    "MZ": "Martinique",
+    "MQ": "Martinique",
     "MR": "Mauritania",
     "MS": "Montserrat",
     "MT": "Malta",
@@ -178,7 +178,7 @@ module.exports={
     "RE": "Reunion",
     "RO": "Romania",
     "RS": "Serbia",
-    "RU": "Russian Federation",
+    "RU": "Russia",
     "RW": "Rwanda",
     "SA": "Saudi Arabia",
     "SB": "Solomon Islands",
@@ -198,9 +198,9 @@ module.exports={
     "ST": "Sao Tome and Principe",
     "SV": "El Salvador",
     "SX": "Sint Maarten",
-    "SY": "Syrian Arab Republic",
+    "SY": "Syria",
     "SZ": "Swaziland",
-    "TC": "Turks and Caicos Islands",
+    "TC": "Turks and Caicos",
     "TD": "Chad",
     "TF": "French Southern Territories",
     "TG": "Togo",
@@ -222,10 +222,10 @@ module.exports={
     "UY": "Uruguay",
     "UZ": "Uzbekistan",
     "VA": "Vatican City",
-    "VC": "Saint Vincent and the Grenadines",
+    "VC": [ "St Vincent", "Saint Vincent" ],
     "VE": "Venezuela",
-    "VG": "Virgin Islands, British",
-    "VI": "Virgin Islands, US",
+    "VG": [ "British Virgin Islands", "Virgin Islands, British" ],
+    "VI": [ "US Virgin Islands", "Virgin Islands, US" ],
     "VN": "Viet Nam",
     "VU": "Vanuatu",
     "WS": "Samoa",
@@ -262,7 +262,7 @@ function refreshCountry() {
   nextButton.classList.add('hidden');
 
   countryName.classList.add('invisible');
-  countryName.textContent = country.name;
+  countryName.textContent = Array.isArray(country.name) ? country.name[0] : country.name;
   flagContainer.src = './country-flags/svg/' + country.initials.toLowerCase() + '.svg';
 }
 
@@ -284,10 +284,22 @@ function main() {
     if (event.which === 13) { cheat(); }
   });
   input.addEventListener('input', function () {
-    if (input.value.toLowerCase() === country.name.toLowerCase()) {
+    var answer = normalize(input.value.toLowerCase());
+    if (Array.isArray(country.name)) {
+      var names = country.name;
+      for (var i = 0; i < names.length; i++) {
+        if (answer === normalize(names[i].toLowerCase())) {
+          refreshCountry();
+        }
+      }
+    } else if (answer === normalize(country.name.toLowerCase())) {
       refreshCountry();
     }
   });
+}
+
+function normalize(name) {
+  return name.replace(/'\./, "").replace(/-/, " ");
 }
 
 main();
