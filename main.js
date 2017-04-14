@@ -24,8 +24,9 @@ function refreshCountry() {
   nextButton.classList.add('hidden');
 
   countryName.classList.add('invisible');
-  countryName.textContent = Array.isArray(country.name) ? country.name[0] : country.name;
+  countryName.textContent = country.name[0];
   flagContainer.src = './country-flags/svg/' + country.initials.toLowerCase() + '.svg';
+  input.focus();
 }
 
 function cheat() {
@@ -38,30 +39,27 @@ function random(max) {
   return Math.floor(Math.random() * max);
 }
 
+function normalize(name) {
+  return name.toLowerCase().replace(/'\./, "").replace(/-/, " ");
+}
+
 function main() {
   refreshCountry();
+
   nextButton.addEventListener('click', refreshCountry);
   cheatButton.addEventListener('click', cheat);
+
   document.addEventListener('keydown', function (event) {
-    if (event.which === 13) { cheat(); }
+    if (event.which === 13) {cheat();}
   });
+
   input.addEventListener('input', function () {
-    var answer = normalize(input.value.toLowerCase());
-    if (Array.isArray(country.name)) {
-      var names = country.name;
-      for (var i = 0; i < names.length; i++) {
-        if (answer === normalize(names[i].toLowerCase())) {
-          refreshCountry();
-        }
-      }
-    } else if (answer === normalize(country.name.toLowerCase())) {
+    var answer = normalize(input.value);
+
+    if (country.name.includes(answer)) {
       refreshCountry();
     }
   });
-}
-
-function normalize(name) {
-  return name.replace(/'\./, "").replace(/-/, " ");
 }
 
 main();
